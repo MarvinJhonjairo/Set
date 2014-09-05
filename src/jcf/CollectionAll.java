@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -20,6 +21,7 @@ public class CollectionAll {
     static String decision;
     static String comparador;
     static int salida=0;
+    static Scanner entradaEscaner = new Scanner (System.in);
 //---------------------------------------------------------//
 
 //---------------------------------------------------------//
@@ -27,23 +29,20 @@ public class CollectionAll {
 //---------------------------------------------------------//   
 
     public static void main(String[] args) {
-            decision = proyecto.set();
-            if (decision.equals("1")){
-                HashSet<String> java = new HashSet();
-                HashSet<String> web = new HashSet();
-                HashSet<String> celulares = new HashSet();                
-                hash(java,web,celulares);       
-            }else if(decision.equals("2")){
-                SortedSet<String> java = new TreeSet();
-                SortedSet<String> web = new TreeSet();
-                SortedSet<String> celulares = new TreeSet();                
-                tree(java,web,celulares);
-            }else if(decision.equals("3")){
-                LinkedHashSet<String> java = new LinkedHashSet();
-                LinkedHashSet<String> web = new LinkedHashSet();
-                LinkedHashSet<String> celulares = new LinkedHashSet(); 
-                linked(java,web,celulares);
-            }
+        SetFactory fact = new SetFactory();
+        System.out.print("Ingrese el set deseado: \n 1. HashSet \n 2. TreeSet \n 3. LinkedHashSet");
+        decision = entradaEscaner.nextLine();
+        
+        Set<String> java = fact.getSet (decision);
+        Set<String> web = fact.getSet (decision);
+        Set<String> celulares = fact.getSet (decision);
+        if(decision.equals("1")){
+            hash(java,web,celulares);
+        }else if(decision.equals("2")){
+            tree(java,web,celulares);        
+        }else if(decision.equals("3")){
+            linked(java,web,celulares);        
+        }
     }
 
 //------------------------------------------------------------//    
@@ -171,19 +170,12 @@ public class CollectionAll {
     }
     
     static void subconjunto(Collection j,Collection w,Collection c){
-        int contador=0;
-        Iterator it = j.iterator();
-        for(int i = 1; i<j.size();i++){
-            it.hasNext();
-            comparador = (String) it.next();
-            if(w.contains(comparador)){
-                contador =+ 1;
-            }
-        }
-        if(contador == j.size()){
-            System.out.println("El conjunto Java es un Subconjunto de Web");
+        boolean sub;
+        sub = w.containsAll(j);// devuelve un boleano 
+        if (sub == true){
+            System.out.println("El conjunto Java es un subconjunto del de Web");
         }else{
-            System.out.println("El conjunto Java no es un Subconjunto de Web");
+            System.out.println("El conjunto Java NO es un subconjunto del Web");
         }
     }
 
@@ -192,25 +184,25 @@ public class CollectionAll {
             if((w.size())>(c.size())){
                 System.out.println("El conjunto con mas elementos es Java");
                 traverse(j);
-                //ordenar(j);
+                ordenado(j);
             }
             if((j.size())>(c.size())){
                 System.out.println("El conjunto con mas elementos es Java");
                 traverse(j);
-                //ordenar(j);
+                ordenado(j);
             }else{
                 System.out.println("El conjunto con mas elementos es Celulares");
                 traverse(c);
-                //ordenar(c);
+                ordenado(c);
             }
         }else if((w.size())>(c.size())){
             System.out.println("El conjunto con mas elementos es Web");
             traverse(w);
-            //ordenar(w);
+            ordenado(w);
         }else{
             System.out.println("El conjunto con mas elementos es Celulares");
             traverse(c);
-            //ordenar(c);
+            ordenado(c);
         }
     }
     
@@ -222,27 +214,18 @@ public class CollectionAll {
         }
         System.out.println();
   }
-/*    static void ordenar(Collection coll) {
-        String[] ordenado = new String[coll.size()];
-        Iterator iter = coll.iterator();
-        int k =-1;
+    static void ordenado(Collection orden){
+        SortedSet ordenar = new TreeSet();
+        Iterator iter = orden.iterator();
         while (iter.hasNext()) {
-          String elem = (String) iter.next();
-          ordenado[k+1]=(elem);
+            ordenar.add((String) iter.next());
         }
-
-        for(int i = 0; i<ordenado.length; i++){ 
-            for(int j = i; j<ordenado.length; j++){ 
-                if(ordenado[i].compareTo(ordenado[j])>0){ 
-                    String aux = ordenado[i]; 
-                    ordenado[i] = ordenado[j]; 
-                    ordenado[j] = aux; 
-                } 
-            } 
+        Iterator iter_ord = ordenar.iterator();
+        System.out.println("Los elementos, ordenados de forma ascendente, del conjunto mayor son:");
+        while (iter_ord.hasNext()) {
+          String elem = (String) iter_ord.next();
+          System.out.print(elem + " ");
         }
-        System.out.println("Elementos ordenados ascendentemente:");
-        for(int i=0;i<ordenado.length;i++){
-            System.out.print(ordenado[i]);
-        }
-    }*/
+        System.out.println();
+    }
 }
